@@ -1,13 +1,64 @@
+let dinoArray = [];
 
-    // Create Dino Constructor
+// Create Dino Constructor
+function Dino(species, weight, height, diet, where, when, fact) {
+    this.species = species;
+    this.weight = weight;
+    this.height = height;
+    this.diet = diet;
+    this.where = where;
+    this.when = when;
+    this.fact = fact;
+}
+
+// Read data from JSON
+fetch('dino.json')
+    .then(response => response.json())
+    .then(result => {
+        dinoArray = createDinoArray(result.Dinos);                
+    });
+
+// Create Dino array
+function createDinoArray(dinos) {    
+    dinos.forEach(element => {
+        newObj = new Dino(
+            element.species,
+            element.weight,
+            element.height,
+            element.diet,
+            element.where,
+            element.when,
+            element.fact
+        )
+        dinoArray.push(newObj);
+    });
+    return dinoArray;
+}
+
+console.log(dinoArray);
+    
+// Create Human Object
+let human = {
+    humanName: '',
+    height: 0,
+    weight: 0,
+    diet: ''
+}
 
 
-    // Create Dino Objects
+// Use IIFE to get human data from form
+human = (function () {
+    return {
+         getHumanData: function () {
+            human.humanName = document.getElementById('name').value;
+            human.height = document.getElementById('feet').value;
+            human.weight = document.getElementById('weight').value;
+            human.diet = document.getElementById('diet').value;
+            return human;
+         },         
+    };
+})();
 
-
-    // Create Human Object
-
-    // Use IIFE to get human data from form
 
 
     // Create Dino Compare Method 1
@@ -30,3 +81,7 @@
 
 
 // On button click, prepare and display infographic
+document.getElementById("btn").addEventListener("click", function() {
+    human.getHumanData();
+    console.log(human);
+  });
