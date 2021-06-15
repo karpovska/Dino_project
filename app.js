@@ -139,9 +139,6 @@ function shuffleArray(array) {
     }
     return array;
 }
-// Add tiles to DOM
-
-// Remove form from screen
 
 
 
@@ -149,36 +146,58 @@ function shuffleArray(array) {
 // On button click, prepare and display infographic
 document.getElementById("btn").addEventListener("click", function () {
     human.getHumanData();
-    console.log(human);
-
-    document.getElementById('dino-compare').style.display = "none";
-    //createTile(human);
-    console.log(this.species);
-
-
-    /*1) First, create a div section and add some text to it using <p> tags. 
     
-    2) Create an element <p> using document.createElement("p").
+    // Remove form from screen
+    document.getElementById('dino-compare').style.display = "none";    
     
-    3) Create a text, using document.createTextNode(), so as to insert it in the above-created element("p").
-    
-    4) Using appendChild() try to append the created element, along with text, to the existing div tag.
-    
-    Thus a new element is created(<p>) and appended to the existing element(<div>). */
-
-    let tag = document.createElement("p");
-    let text = document.createTextNode("This is the place for my grid");
-    tag.appendChild(text);
-    document.getElementById("grid").appendChild(tag);
-
-    const species = 'Pigeon';
-    let img = document.createElement('img');
-    img.src = `./images/${species.toLowerCase()}.png`;
-    img.height = 60;
-    img.width = 60;
-    document.getElementById('grid').appendChild(img);
-    //down.innerHTML = "Image Element Added."; 
     createTilesData();
+
+    // Add tiles to DOM
+    dinoArray.forEach((element,idx) => {
+        let img = document.createElement('img');
+        img.className = "grid-item";
+
+        let tileContainer = document.createElement("div");
+            tileContainer.className = "grid-item";
+            tileContainer.id = "tile-container";
+            document.getElementById('grid').appendChild(tileContainer);
+
+        let factTag = document.createElement("p");
+            factTag.className = "grid-item";
+
+        let animalName = '';
+        if(element.hasOwnProperty('fact')){
+            img.src = `./images/${element.species.toLowerCase()}.png`;
+            animalName = element.species;                         
+            let factText = document.createTextNode(element.fact);
+            factTag.appendChild(factText);
+            //tileContainer.appendChild(factTag);
+        }else{
+            img.src = './images/human.png';
+            animalName = human.humanName;
+            let factText = document.createTextNode("");
+            factTag.appendChild(factText);
+        }        
+        //img.height = 200;
+        
+        
+        let nameTag = document.createElement("h3");  
+        nameTag.className = "grid-item";
+        let nameText = document.createTextNode(animalName);     
+        nameTag.appendChild(nameText); 
+                       
+        tileContainer.appendChild(nameTag);
+        tileContainer.appendChild(factTag);
+        tileContainer.appendChild(img);
+
+        if((idx + 1) % 3 == 0)
+        {
+            //tileContainer.style.top += img.height;
+            //tileContainer.style.left = 0 + "px";
+        }
+        
+    })
+    
     
     console.log(dinoArray);
 });
