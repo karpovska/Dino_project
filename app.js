@@ -12,7 +12,7 @@ function Dino(species, weight, height, diet, where, when, fact) {
 }
 
 // Read data from JSON
-fetch('dino.json')
+fetch("dino.json")
     .then(response => response.json())
     .then(result => {
         dinoArray = createDinoArray(result.Dinos);
@@ -21,16 +21,17 @@ fetch('dino.json')
 // Create Dino array
 function createDinoArray(dinos) {
     dinos.forEach(element => {
-        newObj = new Dino(
-            element.species,
-            element.weight,
-            element.height,
-            element.diet,
-            element.where,
-            element.when,
-            element.fact,
-        )
-        dinoArray.push(newObj);
+        dinoArray.push(
+            new Dino(
+                element.species,
+                element.weight,
+                element.height,
+                element.diet,
+                element.where,
+                element.when,
+                element.fact,
+            )
+        );
     });
     return dinoArray;
 }
@@ -48,18 +49,18 @@ let human = {
 human = (function () {
     return {
         getHumanData: function () {
-            human.humanName = document.getElementById('name').value;
-            human.heightFeet = document.getElementById('feet').value;
-            human.heightInches = document.getElementById('inches').value;
-            human.weight = document.getElementById('weight').value;
-            human.diet = document.getElementById('diet').value;
+            human.humanName = document.getElementById("name").value;
+            human.heightFeet = document.getElementById("feet").value;
+            human.heightInches = document.getElementById("inches").value;
+            human.weight = document.getElementById("weight").value;
+            human.diet = document.getElementById("diet").value;
             return human;
         },
     };
 })();
 
 // Create Dino Compare Method 1
-// NOTE: Weight in JSON file is in lbs, height in inches. 
+// NOTE: Weight in JSON file is in lbs, height in inches.
 function compareDiet(human, dino) {
     if (human.diet === dino.diet) {
         dino.fact = 'You and ' + dino.species + ' have the same diet';
@@ -85,11 +86,8 @@ function compareWeight(human, dino) {
 // Create Dino Compare Method 3
 // NOTE: Weight in JSON file is in lbs, height in inches.
 function compareHeight(human, dino) {
-    let humanHeightInInches = 0;
-    function toInches(human) {
-        humanHeightInInches = human.heightFeet * 12 + human.heightInches;
-        return humanHeightInInches;
-    }
+    // Calculate human height in inches
+    let humanHeightInInches = human.heightFeet * 12 + human.heightInches;
     if (humanHeightInInches === dino.height) {
         dino.fact = 'You and ' + dino.species + ' have the same height';
     } else if (humanHeightInInches < dino.height) {
@@ -107,21 +105,21 @@ function createTilesData() {
         if(element.species !== 'Pigeon' && idx < 3){
             selectRandomFact(human, element);
         }
-    });    
+    });
     shuffleArray(dinoArray);
 
     // Add human to the dino array
-    dinoArray.splice(4, 0, human);    
+    dinoArray.splice(4, 0, human);
 }
 
 // Shuffle compare methods to choose one randomly
-function selectRandomFact(human, dino) {    
+function selectRandomFact(human, dino) {
     let compareFunctionArray = [compareDiet, compareHeight, compareWeight];
     shuffleArray(compareFunctionArray);
     dino.fact = compareFunctionArray[0](human, dino);
 }
 
-// Randomize array using Durstenfeld shuffle algorithm 
+// Randomize array using Durstenfeld shuffle algorithm
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
@@ -136,17 +134,16 @@ function shuffleArray(array) {
 document.getElementById("btn").addEventListener("click", function () {
     // Read human data from the form
     human.getHumanData();
-    
+
     // Remove form from screen
-    document.getElementById('dino-compare').style.display = "none";    
-    
+    document.getElementById("dino-compare").style.display = "none";
     // Generate data for tiles such as fact for dinos and adding human data to dino array
     createTilesData();
 
     // Add tiles to DOM
-    dinoArray.forEach((element,idx) => {
+    dinoArray.forEach(element => {
         // Create html-container for an image
-        let img = document.createElement('img');
+        let img = document.createElement("img");
         img.className = "grid-item";
 
         let animalName = '';
@@ -156,35 +153,35 @@ document.getElementById("btn").addEventListener("click", function () {
         let tileContainer = document.createElement("div");
             tileContainer.className = "grid-item";
             tileContainer.id = "tile-container";
-            document.getElementById('grid').appendChild(tileContainer);           
-        
+            document.getElementById("grid").appendChild(tileContainer);
+
         // If animal is a dinosaur - define img, fact and species
-        if(element.hasOwnProperty('fact')){
+        if(Object.prototype.hasOwnProperty.call(element, "fact")){
             img.src = `./images/${element.species.toLowerCase()}.png`;
-            animalName = element.species;   
-            animalFact = element.fact;                                  
-            
+            animalName = element.species;
+            animalFact = element.fact;
+
         // If animal is a human - define name and image
         }else{
-            img.src = './images/human.png';
-            animalName = human.humanName;            
-        }  
-                
+            img.src = "./images/human.png";
+            animalName = human.humanName;
+        }
+
         // Create html-container for animale name
-        let nameTag = document.createElement("h3");  
+        let nameTag = document.createElement("h3");
             nameTag.className = "grid-item";
-        let nameText = document.createTextNode(animalName);     
-            nameTag.appendChild(nameText); 
+        let nameText = document.createTextNode(animalName);
+            nameTag.appendChild(nameText);
 
         // Create html-container for animal fact
         let factTag = document.createElement("p");
-            factTag.className = "grid-item"; 
+            factTag.className = "grid-item";
         let factText = document.createTextNode(animalFact);
-            factTag.appendChild(factText); 
-        
+            factTag.appendChild(factText);
+
         // Add all html-elements to tile container
-        tileContainer.appendChild(nameTag);        
+        tileContainer.appendChild(nameTag);
         tileContainer.appendChild(img);
-        tileContainer.appendChild(factTag);  
+        tileContainer.appendChild(factTag);
     })
 });
