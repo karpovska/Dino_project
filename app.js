@@ -121,7 +121,7 @@ function selectRandomFact(human, dino) {
     dino.fact = compareFunctionArray[0](human, dino);
 }
 
-// Randomize array in-place using Durstenfeld shuffle algorithm 
+// Randomize array using Durstenfeld shuffle algorithm 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
