@@ -35,8 +35,6 @@ function createDinoArray(dinos) {
     return dinoArray;
 }
 
-console.log(dinoArray);
-
 // Create Human Object
 let human = {
     humanName: '',
@@ -45,7 +43,6 @@ let human = {
     weight: 0,
     diet: ''
 }
-
 
 // Use IIFE to get human data from form
 human = (function () {
@@ -61,7 +58,6 @@ human = (function () {
     };
 })();
 
-
 // Create Dino Compare Method 1
 // NOTE: Weight in JSON file is in lbs, height in inches. 
 function compareDiet(human, dino) {
@@ -72,7 +68,6 @@ function compareDiet(human, dino) {
     }
     return dino.fact;
 }
-
 
 // Create Dino Compare Method 2
 // NOTE: Weight in JSON file is in lbs, height in inches.
@@ -112,21 +107,18 @@ function createTilesData() {
         if(element.species !== 'Pigeon' && idx < 3){
             selectRandomFact(human, element);
         }
-    });
-    
+    });    
     shuffleArray(dinoArray);
 
     // Add human to the dino array
     dinoArray.splice(4, 0, human);    
 }
 
-
 // Shuffle compare methods to choose one randomly
 function selectRandomFact(human, dino) {    
     let compareFunctionArray = [compareDiet, compareHeight, compareWeight];
     shuffleArray(compareFunctionArray);
     dino.fact = compareFunctionArray[0](human, dino);
-
 }
 
 // Randomize array in-place using Durstenfeld shuffle algorithm 
@@ -140,64 +132,59 @@ function shuffleArray(array) {
     return array;
 }
 
-
-
-
 // On button click, prepare and display infographic
 document.getElementById("btn").addEventListener("click", function () {
+    // Read human data from the form
     human.getHumanData();
     
     // Remove form from screen
     document.getElementById('dino-compare').style.display = "none";    
     
+    // Generate data for tiles such as fact for dinos and adding human data to dino array
     createTilesData();
 
     // Add tiles to DOM
     dinoArray.forEach((element,idx) => {
+        // Create html-container for an image
         let img = document.createElement('img');
         img.className = "grid-item";
 
+        let animalName = '';
+        let animalFact = '';
+
+        // Create html-container for a tile
         let tileContainer = document.createElement("div");
             tileContainer.className = "grid-item";
             tileContainer.id = "tile-container";
-            document.getElementById('grid').appendChild(tileContainer);
-
-        let factTag = document.createElement("p");
-            factTag.className = "grid-item";
-
-        let animalName = '';
+            document.getElementById('grid').appendChild(tileContainer);           
+        
+        // If animal is a dinosaur - define img, fact and species
         if(element.hasOwnProperty('fact')){
             img.src = `./images/${element.species.toLowerCase()}.png`;
-            animalName = element.species;                         
-            let factText = document.createTextNode(element.fact);
-            factTag.appendChild(factText);
-            //tileContainer.appendChild(factTag);
+            animalName = element.species;   
+            animalFact = element.fact;                                  
+            
+        // If animal is a human - define name and image
         }else{
             img.src = './images/human.png';
-            animalName = human.humanName;
-            let factText = document.createTextNode("");
-            factTag.appendChild(factText);
-        }        
-        //img.height = 200;
-        
-        
+            animalName = human.humanName;            
+        }  
+                
+        // Create html-container for animale name
         let nameTag = document.createElement("h3");  
-        nameTag.className = "grid-item";
+            nameTag.className = "grid-item";
         let nameText = document.createTextNode(animalName);     
-        nameTag.appendChild(nameText); 
-                       
-        tileContainer.appendChild(nameTag);
-        tileContainer.appendChild(factTag);
-        tileContainer.appendChild(img);
+            nameTag.appendChild(nameText); 
 
-        if((idx + 1) % 3 == 0)
-        {
-            //tileContainer.style.top += img.height;
-            //tileContainer.style.left = 0 + "px";
-        }
+        // Create html-container for animal fact
+        let factTag = document.createElement("p");
+            factTag.className = "grid-item"; 
+        let factText = document.createTextNode(animalFact);
+            factTag.appendChild(factText); 
         
+        // Add all html-elements to tile container
+        tileContainer.appendChild(nameTag);        
+        tileContainer.appendChild(img);
+        tileContainer.appendChild(factTag);  
     })
-    
-    
-    console.log(dinoArray);
 });
