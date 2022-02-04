@@ -12,7 +12,7 @@ function Dino(species, weight, height, diet, where, when, fact) {
 }
 
 // Read data from JSON
-fetch("dino.json")
+fetch("https://raw.githubusercontent.com/karpovska/Udacity_Object-Oriented-Javascript/master/dino.json")
     .then(response => response.json())
     .then(result => {
         dinoArray = createDinoArray(result.Dinos);
